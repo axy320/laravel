@@ -1,0 +1,1129 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 6 0 R 9 0 R 12 0 R 15 0 R 18 0 R 21 0 R 24 0 R 27 0 R 30 0 R] /Count 10 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+5 0 obj
+<< /Length 2601 >>
+stream
+BT
+/F1 10 Tf
+50 820 Td
+(PANDUAN MEMBUAT CRUD BUKUS DI LARAVEL) Tj
+0 -14 Td
+(PENGENALAN) Tj
+0 -14 Td
+(CRUD adalah singkatan dari **Create, Read, Update, Delete** - empat operasi dasar) Tj
+0 -14 Td
+(dalam manajemen data. Panduan ini akan menjelaskan langkah-langkah lengkap untuk) Tj
+0 -14 Td
+(membuat fitur CRUD untuk tabel bukus di aplikasi perpustakaan Laravel.) Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+(TAHAP 1: PERSIAPAN DATABASE) Tj
+0 -14 Td
+(1.1 MEMBUAT MIGRATION \(MIGRASI DATABASE\)) Tj
+0 -14 Td
+(Migration digunakan untuk membuat struktur tabel di database secara terprogram.) Tj
+0 -14 Td
+(**File**: `database/migrations/2026_02_11_081154_create_bukus_table.php`) Tj
+0 -14 Td
+(<?php) Tj
+0 -14 Td
+(use Illuminate\\Database\\Migrations\\Migration;) Tj
+0 -14 Td
+(use Illuminate\\Database\\Schema\\Blueprint;) Tj
+0 -14 Td
+(use Illuminate\\Support\\Facades\\Schema;) Tj
+0 -14 Td
+(return new class extends Migration) Tj
+0 -14 Td
+({) Tj
+0 -14 Td
+(public function up\(\): void) Tj
+0 -14 Td
+({) Tj
+0 -14 Td
+(Schema::create\('bukus', function \(Blueprint $table\) {) Tj
+0 -14 Td
+($table->id\(\); // ID otomatis) Tj
+0 -14 Td
+($table->string\('judul'\); // Judul buku) Tj
+0 -14 Td
+($table->string\('penulis'\); // Nama penulis) Tj
+0 -14 Td
+($table->string\('tahun_terbit'\); // Tahun terbit) Tj
+0 -14 Td
+($table->foreignId\('kategori_id'\) // Foreign key ke tabel kategoris) Tj
+0 -14 Td
+(->constrained\('kategoris'\);) Tj
+0 -14 Td
+($table->integer\('stok'\); // Jumlah stok buku) Tj
+0 -14 Td
+($table->timestamps\(\); // Kolom created_at dan updated_at) Tj
+0 -14 Td
+(}\);) Tj
+0 -14 Td
+(}) Tj
+0 -14 Td
+(public function down\(\): void) Tj
+0 -14 Td
+({) Tj
+0 -14 Td
+(Schema::dropIfExists\('bukus'\);) Tj
+0 -14 Td
+(}) Tj
+0 -14 Td
+(};) Tj
+0 -14 Td
+(**Penjelasan**:) Tj
+0 -14 Td
+(• `id\(\)`: Membuat kolom ID sebagai primary key dengan auto increment) Tj
+0 -14 Td
+(• `string\(\)`: Membuat kolom teks dengan panjang 255 karakter) Tj
+0 -14 Td
+(• `integer\(\)`: Membuat kolom untuk angka bulat) Tj
+0 -14 Td
+(• `foreignId\(\)`: Membuat kolom yang mereferensikan tabel lain \(foreign key\)) Tj
+0 -14 Td
+(• `timestamps\(\)`: Membuat kolom `created_at` dan `updated_at` otomatis) Tj
+0 -14 Td
+(• `constrained\(\)`: Menentukan nama tabel yang direferensikan) Tj
+0 -14 Td
+(**Cara Menjalankan**:) Tj
+0 -14 Td
+(php artisan migrate) Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+(TAHAP 2: MEMBUAT MODEL) Tj
+0 -14 Td
+(2.1 MODEL BUKU) Tj
+0 -14 Td
+(Model adalah representasi data yang menghubungkan aplikasi dengan database.) Tj
+0 -14 Td
+(**File**: `app/Models/Buku.php`) Tj
+0 -14 Td
+(<?php) Tj
+0 -14 Td
+(namespace App\\Models;) Tj
+0 -14 Td
+ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 7 0 R >> >> /Contents 8 0 R >>
+endobj
+7 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+8 0 obj
+<< /Length 2170 >>
+stream
+BT
+/F1 10 Tf
+50 820 Td
+(use Illuminate\\Database\\Eloquent\\Model;) Tj
+0 -14 Td
+(class Buku extends Model) Tj
+0 -14 Td
+({) Tj
+0 -14 Td
+(// Kolom yang dapat diisi mass assignment) Tj
+0 -14 Td
+(protected $fillable = ['judul', 'penulis', 'tahun_terbit', 'kategori_id', 'stok'];) Tj
+0 -14 Td
+(// Relasi Many-to-One dengan Kategori) Tj
+0 -14 Td
+(public function kategori\(\)) Tj
+0 -14 Td
+({) Tj
+0 -14 Td
+(return $this->belongsTo\(Kategori::class\);) Tj
+0 -14 Td
+(}) Tj
+0 -14 Td
+(}) Tj
+0 -14 Td
+(**Penjelasan**:) Tj
+0 -14 Td
+(• `$fillable`: Mendaftarkan kolom mana saja yang boleh diisi melalui `create\(\)` atau) Tj
+0 -14 Td
+(`update\(\)` untuk keamanan) Tj
+0 -14 Td
+(• `belongsTo\(\)`: Menunjukkan bahwa satu buku milik satu kategori) Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+(TAHAP 3: MEMBUAT CONTROLLER) Tj
+0 -14 Td
+(3.1 CONTROLLER UNTUK CRUD BUKUS) Tj
+0 -14 Td
+(Controller menangani logika bisnis dan mengatur alur data.) Tj
+0 -14 Td
+(**File**: `app/Http/Controllers/BukuController.php`) Tj
+0 -14 Td
+(<?php) Tj
+0 -14 Td
+(namespace App\\Http\\Controllers;) Tj
+0 -14 Td
+(use Illuminate\\Http\\Request;) Tj
+0 -14 Td
+(use App\\Models\\Buku;) Tj
+0 -14 Td
+(use App\\Models\\Kategori;) Tj
+0 -14 Td
+(class BukuController extends Controller) Tj
+0 -14 Td
+({) Tj
+0 -14 Td
+(/**) Tj
+0 -14 Td
+(• READ - Menampilkan daftar semua buku) Tj
+0 -14 Td
+(*/) Tj
+0 -14 Td
+(public function index\(\)) Tj
+0 -14 Td
+({) Tj
+0 -14 Td
+($bukus = Buku::with\('kategori'\)->get\(\); // Ambil semua buku dengan relasi kategori) Tj
+0 -14 Td
+(return view\('bukus.index', compact\('bukus'\)\);) Tj
+0 -14 Td
+(}) Tj
+0 -14 Td
+(/**) Tj
+0 -14 Td
+(• CREATE \(Bagian 1\) - Menampilkan form tambah buku) Tj
+0 -14 Td
+(*/) Tj
+0 -14 Td
+(public function create\(\)) Tj
+0 -14 Td
+({) Tj
+0 -14 Td
+($kategoris = Kategori::all\(\); // Ambil semua kategori untuk dropdown) Tj
+0 -14 Td
+(return view\('bukus.create', compact\('kategoris'\)\);) Tj
+0 -14 Td
+(}) Tj
+0 -14 Td
+(/**) Tj
+0 -14 Td
+(• CREATE \(Bagian 2\) - Menyimpan data buku ke database) Tj
+0 -14 Td
+(*/) Tj
+0 -14 Td
+(public function store\(Request $request\)) Tj
+0 -14 Td
+({) Tj
+0 -14 Td
+(// Validasi input dari form) Tj
+0 -14 Td
+($request->validate\([) Tj
+0 -14 Td
+ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 10 0 R >> >> /Contents 11 0 R >>
+endobj
+10 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+11 0 obj
+<< /Length 2089 >>
+stream
+BT
+/F1 10 Tf
+50 820 Td
+('judul' => 'required', // Harus diisi) Tj
+0 -14 Td
+('penulis' => 'required',) Tj
+0 -14 Td
+('tahun_terbit' => 'required|integer', // Harus berupa angka) Tj
+0 -14 Td
+('kategori_id' => 'required|exists:kategoris,id', // Harus ada di tabel kategoris) Tj
+0 -14 Td
+('stok' => 'required|integer',) Tj
+0 -14 Td
+(]\);) Tj
+0 -14 Td
+(// Simpan data ke database) Tj
+0 -14 Td
+(Buku::create\($request->all\(\)\);) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(// Redirect ke halaman daftar dengan pesan sukses) Tj
+0 -14 Td
+(return redirect\(\)->route\('bukus.index'\)->with\('success', 'Buku berhasil ditambahkan'\);) Tj
+0 -14 Td
+(}) Tj
+0 -14 Td
+(/**) Tj
+0 -14 Td
+(• READ \(Detail\) - Menampilkan detail satu buku) Tj
+0 -14 Td
+(*/) Tj
+0 -14 Td
+(public function show\(Buku $buku\)) Tj
+0 -14 Td
+({) Tj
+0 -14 Td
+(return view\('bukus.show', compact\('buku'\)\);) Tj
+0 -14 Td
+(}) Tj
+0 -14 Td
+(/**) Tj
+0 -14 Td
+(• UPDATE \(Bagian 1\) - Menampilkan form edit buku) Tj
+0 -14 Td
+(*/) Tj
+0 -14 Td
+(public function edit\(Buku $buku\)) Tj
+0 -14 Td
+({) Tj
+0 -14 Td
+($kategoris = Kategori::all\(\);) Tj
+0 -14 Td
+(return view\('bukus.edit', compact\('buku', 'kategoris'\)\);) Tj
+0 -14 Td
+(}) Tj
+0 -14 Td
+(/**) Tj
+0 -14 Td
+(• UPDATE \(Bagian 2\) - Menyimpan perubahan data buku) Tj
+0 -14 Td
+(*/) Tj
+0 -14 Td
+(public function update\(Request $request, Buku $buku\)) Tj
+0 -14 Td
+({) Tj
+0 -14 Td
+(// Validasi input) Tj
+0 -14 Td
+($request->validate\([) Tj
+0 -14 Td
+('judul' => 'required',) Tj
+0 -14 Td
+('penulis' => 'required',) Tj
+0 -14 Td
+('tahun_terbit' => 'required|integer',) Tj
+0 -14 Td
+('kategori_id' => 'required|exists:kategoris,id',) Tj
+0 -14 Td
+('stok' => 'required|integer',) Tj
+0 -14 Td
+(]\);) Tj
+0 -14 Td
+(// Update data di database) Tj
+0 -14 Td
+($buku->update\($request->all\(\)\);) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(return redirect\(\)->route\('bukus.index'\)->with\('success', 'Buku berhasil diupdate'\);) Tj
+0 -14 Td
+(}) Tj
+0 -14 Td
+(/**) Tj
+0 -14 Td
+(• DELETE - Menghapus data buku dari database) Tj
+0 -14 Td
+(*/) Tj
+0 -14 Td
+(public function destroy\(Buku $buku\)) Tj
+0 -14 Td
+({) Tj
+0 -14 Td
+ET
+endstream
+endobj
+12 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 13 0 R >> >> /Contents 14 0 R >>
+endobj
+13 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+14 0 obj
+<< /Length 2586 >>
+stream
+BT
+/F1 10 Tf
+50 820 Td
+($buku->delete\(\);) Tj
+0 -14 Td
+(return redirect\(\)->route\('bukus.index'\)->with\('success', 'Buku berhasil dihapus'\);) Tj
+0 -14 Td
+(}) Tj
+0 -14 Td
+(}) Tj
+0 -14 Td
+(**Penjelasan Method**:) Tj
+0 -14 Td
+(• `index\(\)`: Menampilkan list semua buku \(READ\)) Tj
+0 -14 Td
+(• `create\(\)`: Menampilkan form untuk membuat buku baru \(CREATE - tampilan\)) Tj
+0 -14 Td
+(• `store\(\)`: Menyimpan data buku baru ke database \(CREATE - simpan\)) Tj
+0 -14 Td
+(• `show\(\)`: Menampilkan detail satu buku \(READ detail\)) Tj
+0 -14 Td
+(• `edit\(\)`: Menampilkan form untuk edit buku \(UPDATE - tampilan\)) Tj
+0 -14 Td
+(• `update\(\)`: Menyimpan perubahan buku ke database \(UPDATE - simpan\)) Tj
+0 -14 Td
+(• `destroy\(\)`: Menghapus buku dari database \(DELETE\)) Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+(TAHAP 4: MEMBUAT ROUTES \(ROUTING\)) Tj
+0 -14 Td
+(4.1 MENDAFTARKAN ROUTE RESOURCE) Tj
+0 -14 Td
+(Routes menghubungkan URL dengan controller method.) Tj
+0 -14 Td
+(**File**: `routes/web.php`) Tj
+0 -14 Td
+(<?php) Tj
+0 -14 Td
+(use Illuminate\\Support\\Facades\\Route;) Tj
+0 -14 Td
+(use App\\Http\\Controllers\\BukuController;) Tj
+0 -14 Td
+(// Route resource otomatis membuat 7 route untuk CRUD) Tj
+0 -14 Td
+(Route::resource\('bukus', BukuController::class\);) Tj
+0 -14 Td
+(**Route yang Dibuat Otomatis**:) Tj
+0 -14 Td
+(Metode HTTP URL Method Deskripsi) Tj
+0 -14 Td
+(------------- ------------------ -------------- ------------------------------) Tj
+0 -14 Td
+(GET /bukus index Tampilkan daftar buku) Tj
+0 -14 Td
+(GET /bukus/create create Tampilkan form tambah) Tj
+0 -14 Td
+(POST /bukus store Simpan buku baru) Tj
+0 -14 Td
+(GET /bukus/{id} show Tampilkan detail buku) Tj
+0 -14 Td
+(GET /bukus/{id}/edit edit Tampilkan form edit) Tj
+0 -14 Td
+(PUT/PATCH /bukus/{id} update Simpan perubahan buku) Tj
+0 -14 Td
+(DELETE /bukus/{id} destroy Hapus buku) Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+(TAHAP 5: MEMBUAT VIEWS \(TAMPILAN\)) Tj
+0 -14 Td
+(5.1 INDEX VIEW - DAFTAR BUKU) Tj
+0 -14 Td
+(**File**: `resources/views/bukus/index.blade.php`) Tj
+0 -14 Td
+(@extends\('layouts.app'\)) Tj
+0 -14 Td
+(@section\('content'\)) Tj
+0 -14 Td
+(<h3>Data Buku</h3>) Tj
+0 -14 Td
+(<!-- Tombol Tambah Buku -->) Tj
+0 -14 Td
+(<a href="{{ route\('bukus.create'\) }}" class="btn btn-primary mb-3">Tambah Buku</a>) Tj
+0 -14 Td
+(<!-- Tabel Daftar Buku -->) Tj
+0 -14 Td
+(<table class="table table-bordered">) Tj
+0 -14 Td
+(<thead>) Tj
+0 -14 Td
+(<tr>) Tj
+0 -14 Td
+(<th>Judul</th>) Tj
+0 -14 Td
+(<th>Penulis</th>) Tj
+0 -14 Td
+(<th>Tahun Terbit</th>) Tj
+0 -14 Td
+(<th>Kategori</th>) Tj
+0 -14 Td
+(<th>Stok</th>) Tj
+0 -14 Td
+ET
+endstream
+endobj
+15 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 16 0 R >> >> /Contents 17 0 R >>
+endobj
+16 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+17 0 obj
+<< /Length 2180 >>
+stream
+BT
+/F1 10 Tf
+50 820 Td
+(<th>Aksi</th>) Tj
+0 -14 Td
+(</tr>) Tj
+0 -14 Td
+(</thead>) Tj
+0 -14 Td
+(<tbody>) Tj
+0 -14 Td
+(@foreach\($bukus as $buku\)) Tj
+0 -14 Td
+(<tr>) Tj
+0 -14 Td
+(<td>{{ $buku->judul }}</td>) Tj
+0 -14 Td
+(<td>{{ $buku->penulis }}</td>) Tj
+0 -14 Td
+(<td>{{ $buku->tahun_terbit }}</td>) Tj
+0 -14 Td
+(<!-- Tampilkan nama kategori dari relasi -->) Tj
+0 -14 Td
+(<td>{{ $buku->kategori->nama_kategori ?? 'N/A' }}</td>) Tj
+0 -14 Td
+(<td>{{ $buku->stok }}</td>) Tj
+0 -14 Td
+(<td>) Tj
+0 -14 Td
+(<!-- Tombol Lihat Detail -->) Tj
+0 -14 Td
+(<a href="{{ route\('bukus.show', $buku\) }}" class="btn btn-info btn-sm">Lihat</a>) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(<!-- Tombol Edit -->) Tj
+0 -14 Td
+(<a href="{{ route\('bukus.edit', $buku\) }}" class="btn btn-warning btn-sm">Edit</a>) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(<!-- Tombol Hapus dengan Konfirmasi -->) Tj
+0 -14 Td
+(<form action="{{ route\('bukus.destroy', $buku\) }}" method="POST") Tj
+0 -14 Td
+(style="display:inline;">) Tj
+0 -14 Td
+(@csrf) Tj
+0 -14 Td
+(@method\('DELETE'\)) Tj
+0 -14 Td
+(<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm\('Apakah) Tj
+0 -14 Td
+(Anda yakin?'\)">Hapus</button>) Tj
+0 -14 Td
+(</form>) Tj
+0 -14 Td
+(</td>) Tj
+0 -14 Td
+(</tr>) Tj
+0 -14 Td
+(@endforeach) Tj
+0 -14 Td
+(</tbody>) Tj
+0 -14 Td
+(</table>) Tj
+0 -14 Td
+(@endsection) Tj
+0 -14 Td
+(**Penjelasan**:) Tj
+0 -14 Td
+(• `@extends\(\)`: Mewarisi template layout) Tj
+0 -14 Td
+(• `@section\(\)`: Mendefinisikan bagian konten) Tj
+0 -14 Td
+(• `{{ route\(\) }}`: Membuat URL dari nama route) Tj
+0 -14 Td
+(• `{{ $buku->judul }}`: Menampilkan data dari model) Tj
+0 -14 Td
+(• `@foreach\(\)`: Perulangan untuk menampilkan list) Tj
+0 -14 Td
+(• `@csrf`: Token keamanan Laravel) Tj
+0 -14 Td
+(• `@method\(\)`: Untuk method HTTP selain GET/POST) Tj
+0 -14 Td
+(5.2 CREATE VIEW - FORM TAMBAH BUKU) Tj
+0 -14 Td
+(**File**: `resources/views/bukus/create.blade.php`) Tj
+0 -14 Td
+(@extends\('layouts.app'\)) Tj
+0 -14 Td
+(@section\('content'\)) Tj
+0 -14 Td
+(<h3>Tambah Buku</h3>) Tj
+0 -14 Td
+(<form action="{{ route\('bukus.store'\) }}" method="POST">) Tj
+0 -14 Td
+(@csrf) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(<div class="form-group">) Tj
+0 -14 Td
+ET
+endstream
+endobj
+18 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 19 0 R >> >> /Contents 20 0 R >>
+endobj
+19 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+20 0 obj
+<< /Length 2251 >>
+stream
+BT
+/F1 10 Tf
+50 820 Td
+(<label>Judul</label>) Tj
+0 -14 Td
+(<input type="text" name="judul" class="form-control" required>) Tj
+0 -14 Td
+(</div>) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(<div class="form-group">) Tj
+0 -14 Td
+(<label>Penulis</label>) Tj
+0 -14 Td
+(<input type="text" name="penulis" class="form-control" required>) Tj
+0 -14 Td
+(</div>) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(<div class="form-group">) Tj
+0 -14 Td
+(<label>Tahun Terbit</label>) Tj
+0 -14 Td
+(<input type="number" name="tahun_terbit" class="form-control" required>) Tj
+0 -14 Td
+(</div>) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(<div class="form-group">) Tj
+0 -14 Td
+(<label>Kategori</label>) Tj
+0 -14 Td
+(<select name="kategori_id" class="form-control" required>) Tj
+0 -14 Td
+(@foreach\($kategoris as $kategori\)) Tj
+0 -14 Td
+(<option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>) Tj
+0 -14 Td
+(@endforeach) Tj
+0 -14 Td
+(</select>) Tj
+0 -14 Td
+(</div>) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(<div class="form-group">) Tj
+0 -14 Td
+(<label>Stok</label>) Tj
+0 -14 Td
+(<input type="number" name="stok" class="form-control" required>) Tj
+0 -14 Td
+(</div>) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(<button type="submit" class="btn btn-primary">Simpan</button>) Tj
+0 -14 Td
+(<a href="{{ route\('bukus.index'\) }}" class="btn btn-secondary">Kembali</a>) Tj
+0 -14 Td
+(</form>) Tj
+0 -14 Td
+(@endsection) Tj
+0 -14 Td
+(**Penjelasan**:) Tj
+0 -14 Td
+(• Form action mengarah ke `bukus.store` \(method POST\)) Tj
+0 -14 Td
+(• `@csrf`: Token keamanan untuk mencegah CSRF attack) Tj
+0 -14 Td
+(• Input fields sesuai dengan kolom tabel di database) Tj
+0 -14 Td
+(• Dropdown kategori di-populate dari data kategori) Tj
+0 -14 Td
+(5.3 EDIT VIEW - FORM EDIT BUKU) Tj
+0 -14 Td
+(**File**: `resources/views/bukus/edit.blade.php`) Tj
+0 -14 Td
+(@extends\('layouts.app'\)) Tj
+0 -14 Td
+(@section\('content'\)) Tj
+0 -14 Td
+(<h3>Edit Buku</h3>) Tj
+0 -14 Td
+(<form action="{{ route\('bukus.update', $buku\) }}" method="POST">) Tj
+0 -14 Td
+(@csrf) Tj
+0 -14 Td
+(@method\('PUT'\) <!-- Menentukan method PUT untuk update -->) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(<div class="form-group">) Tj
+0 -14 Td
+(<label>Judul</label>) Tj
+0 -14 Td
+(<input type="text" name="judul" value="{{ $buku->judul }}" class="form-control") Tj
+0 -14 Td
+(required>) Tj
+0 -14 Td
+ET
+endstream
+endobj
+21 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 22 0 R >> >> /Contents 23 0 R >>
+endobj
+22 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+23 0 obj
+<< /Length 2200 >>
+stream
+BT
+/F1 10 Tf
+50 820 Td
+(</div>) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(<div class="form-group">) Tj
+0 -14 Td
+(<label>Penulis</label>) Tj
+0 -14 Td
+(<input type="text" name="penulis" value="{{ $buku->penulis }}" class="form-control") Tj
+0 -14 Td
+(required>) Tj
+0 -14 Td
+(</div>) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(<div class="form-group">) Tj
+0 -14 Td
+(<label>Tahun Terbit</label>) Tj
+0 -14 Td
+(<input type="number" name="tahun_terbit" value="{{ $buku->tahun_terbit }}") Tj
+0 -14 Td
+(class="form-control" required>) Tj
+0 -14 Td
+(</div>) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(<div class="form-group">) Tj
+0 -14 Td
+(<label>Kategori</label>) Tj
+0 -14 Td
+(<select name="kategori_id" class="form-control" required>) Tj
+0 -14 Td
+(@foreach\($kategoris as $kategori\)) Tj
+0 -14 Td
+(<option value="{{ $kategori->id }}" {{ $buku->kategori_id == $kategori->id ?) Tj
+0 -14 Td
+('selected' : '' }}>) Tj
+0 -14 Td
+({{ $kategori->nama_kategori }}) Tj
+0 -14 Td
+(</option>) Tj
+0 -14 Td
+(@endforeach) Tj
+0 -14 Td
+(</select>) Tj
+0 -14 Td
+(</div>) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(<div class="form-group">) Tj
+0 -14 Td
+(<label>Stok</label>) Tj
+0 -14 Td
+(<input type="number" name="stok" value="{{ $buku->stok }}" class="form-control") Tj
+0 -14 Td
+(required>) Tj
+0 -14 Td
+(</div>) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(<button type="submit" class="btn btn-primary">Update</button>) Tj
+0 -14 Td
+(<a href="{{ route\('bukus.index'\) }}" class="btn btn-secondary">Kembali</a>) Tj
+0 -14 Td
+(</form>) Tj
+0 -14 Td
+(@endsection) Tj
+0 -14 Td
+(**Penjelasan**:) Tj
+0 -14 Td
+(• Form action mengarah ke `bukus.update` \(method PUT\)) Tj
+0 -14 Td
+(• `@method\('PUT'\)`: Karena form HTML hanya support GET/POST) Tj
+0 -14 Td
+(• `value="{{ $buku->judul }}"`: Pre-fill form dengan data yang ada) Tj
+0 -14 Td
+(• `{{ $buku->kategori_id == $kategori->id ? 'selected' : '' }}`: Pilih kategori yang) Tj
+0 -14 Td
+(sesuai) Tj
+0 -14 Td
+(5.4 SHOW VIEW - DETAIL BUKU) Tj
+0 -14 Td
+(**File**: `resources/views/bukus/show.blade.php`) Tj
+0 -14 Td
+(@extends\('layouts.app'\)) Tj
+0 -14 Td
+(@section\('content'\)) Tj
+0 -14 Td
+(<h3>Detail Buku</h3>) Tj
+0 -14 Td
+(<div class="card">) Tj
+0 -14 Td
+(<div class="card-body">) Tj
+0 -14 Td
+(<h5 class="card-title">{{ $buku->judul }}</h5>) Tj
+0 -14 Td
+ET
+endstream
+endobj
+24 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 25 0 R >> >> /Contents 26 0 R >>
+endobj
+25 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+26 0 obj
+<< /Length 2667 >>
+stream
+BT
+/F1 10 Tf
+50 820 Td
+(<p><strong>Penulis:</strong> {{ $buku->penulis }}</p>) Tj
+0 -14 Td
+(<p><strong>Tahun Terbit:</strong> {{ $buku->tahun_terbit }}</p>) Tj
+0 -14 Td
+(<p><strong>Kategori:</strong> {{ $buku->kategori->nama_kategori ?? 'N/A' }}</p>) Tj
+0 -14 Td
+(<p><strong>Stok:</strong> {{ $buku->stok }}</p>) Tj
+0 -14 Td
+(</div>) Tj
+0 -14 Td
+(</div>) Tj
+0 -14 Td
+(<a href="{{ route\('bukus.index'\) }}" class="btn btn-secondary">Kembali</a>) Tj
+0 -14 Td
+(@endsection) Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+(TAHAP 6: ALUR KERJA CRUD) Tj
+0 -14 Td
+(6.1 CREATE \(MEMBUAT DATA BARU\)) Tj
+0 -14 Td
+(**Alur**:) Tj
+0 -14 Td
+(1. User klik tombol "Tambah Buku" di halaman index) Tj
+0 -14 Td
+(2. Browser navigasi ke `/bukus/create` \(GET request\)) Tj
+0 -14 Td
+(3. Controller method `create\(\)` dijalankan) Tj
+0 -14 Td
+(4. Form HTML ditampilkan ke user) Tj
+0 -14 Td
+(5. User isi form dan klik "Simpan") Tj
+0 -14 Td
+(6. Form di-submit ke `/bukus` \(POST request\)) Tj
+0 -14 Td
+(7. Controller method `store\(\)` dijalankan) Tj
+0 -14 Td
+(8. Data divalidasi) Tj
+0 -14 Td
+(9. Data disimpan ke database dengan `Buku::create\(\)`) Tj
+0 -14 Td
+(10. User redirect ke halaman index dengan pesan sukses) Tj
+0 -14 Td
+(6.2 READ \(MEMBACA DATA\)) Tj
+0 -14 Td
+(**Daftar Buku \(Index\)**:) Tj
+0 -14 Td
+(1. User akses `/bukus`) Tj
+0 -14 Td
+(2. Controller method `index\(\)` dijalankan) Tj
+0 -14 Td
+(3. Data diambil dari database: `Buku::with\('kategori'\)->get\(\)`) Tj
+0 -14 Td
+(4. Data ditampilkan di tabel) Tj
+0 -14 Td
+(**Detail Buku \(Show\)**:) Tj
+0 -14 Td
+(1. User klik tombol "Lihat" di tabel) Tj
+0 -14 Td
+(2. Browser navigasi ke `/bukus/{id}` \(GET request\)) Tj
+0 -14 Td
+(3. Controller method `show\(\)` dijalankan dengan model binding) Tj
+0 -14 Td
+(4. Detail buku ditampilkan) Tj
+0 -14 Td
+(6.3 UPDATE \(MENGUBAH DATA\)) Tj
+0 -14 Td
+(**Alur**:) Tj
+0 -14 Td
+(1. User klik tombol "Edit" di tabel) Tj
+0 -14 Td
+(2. Browser navigasi ke `/bukus/{id}/edit` \(GET request\)) Tj
+0 -14 Td
+(3. Controller method `edit\(\)` dijalankan) Tj
+0 -14 Td
+(4. Form ditampilkan dengan data yang sudah ada \(pre-fill\)) Tj
+0 -14 Td
+(5. User ubah data dan klik "Update") Tj
+0 -14 Td
+(6. Form di-submit ke `/bukus/{id}` \(PUT request\)) Tj
+0 -14 Td
+(7. Controller method `update\(\)` dijalankan) Tj
+0 -14 Td
+(8. Data divalidasi) Tj
+0 -14 Td
+(9. Data diperbarui di database dengan `$buku->update\(\)`) Tj
+0 -14 Td
+(10. User redirect dengan pesan sukses) Tj
+0 -14 Td
+(6.4 DELETE \(MENGHAPUS DATA\)) Tj
+0 -14 Td
+(**Alur**:) Tj
+0 -14 Td
+(1. User klik tombol "Hapus" di tabel) Tj
+0 -14 Td
+(2. Browser menampilkan konfirmasi dialog) Tj
+0 -14 Td
+(3. Jika user konfirm, form di-submit dengan method DELETE) Tj
+0 -14 Td
+ET
+endstream
+endobj
+27 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 28 0 R >> >> /Contents 29 0 R >>
+endobj
+28 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+29 0 obj
+<< /Length 2275 >>
+stream
+BT
+/F1 10 Tf
+50 820 Td
+(4. Browser mengirim DELETE request ke `/bukus/{id}`) Tj
+0 -14 Td
+(5. Controller method `destroy\(\)` dijalankan) Tj
+0 -14 Td
+(6. Data dihapus dari database dengan `$buku->delete\(\)`) Tj
+0 -14 Td
+(7. User redirect dengan pesan sukses) Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+(TAHAP 7: FITUR KEAMANAN) Tj
+0 -14 Td
+(7.1 CSRF PROTECTION) Tj
+0 -14 Td
+(Semua form dalam Laravel dilindungi dari CSRF attack dengan token:) Tj
+0 -14 Td
+(<form action="{{ route\('bukus.store'\) }}" method="POST">) Tj
+0 -14 Td
+(@csrf <!-- Token security -->) Tj
+0 -14 Td
+(...) Tj
+0 -14 Td
+(</form>) Tj
+0 -14 Td
+(7.2 VALIDASI DATA) Tj
+0 -14 Td
+(Data divalidasi sebelum disimpan ke database:) Tj
+0 -14 Td
+($request->validate\([) Tj
+0 -14 Td
+('judul' => 'required',) Tj
+0 -14 Td
+('tahun_terbit' => 'required|integer',) Tj
+0 -14 Td
+('kategori_id' => 'required|exists:kategoris,id',) Tj
+0 -14 Td
+(]\);) Tj
+0 -14 Td
+(7.3 MASS ASSIGNMENT PROTECTION) Tj
+0 -14 Td
+(Model hanya mengizinkan kolom tertentu untuk diisi:) Tj
+0 -14 Td
+(class Buku extends Model) Tj
+0 -14 Td
+({) Tj
+0 -14 Td
+(protected $fillable = ['judul', 'penulis', 'tahun_terbit', 'kategori_id', 'stok'];) Tj
+0 -14 Td
+(}) Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+(TAHAP 8: TESTING CRUD) Tj
+0 -14 Td
+(TEST CREATE:) Tj
+0 -14 Td
+(1. Akses `/bukus/create`) Tj
+0 -14 Td
+(2. Isi form dengan data buku baru) Tj
+0 -14 Td
+(3. Klik "Simpan") Tj
+0 -14 Td
+(4. Verifikasi data muncul di halaman index dan database) Tj
+0 -14 Td
+(TEST READ:) Tj
+0 -14 Td
+(1. Klik tombol "Lihat" pada salah satu buku) Tj
+0 -14 Td
+(2. Verifikasi detail buku ditampilkan dengan benar) Tj
+0 -14 Td
+(TEST UPDATE:) Tj
+0 -14 Td
+(1. Klik tombol "Edit" pada salah satu buku) Tj
+0 -14 Td
+(2. Ubah salah satu field) Tj
+0 -14 Td
+(3. Klik "Update") Tj
+0 -14 Td
+(4. Verifikasi perubahan tersimpan di database) Tj
+0 -14 Td
+(TEST DELETE:) Tj
+0 -14 Td
+(1. Klik tombol "Hapus" pada salah satu buku) Tj
+0 -14 Td
+(2. Konfirm di dialog) Tj
+0 -14 Td
+(3. Verifikasi buku terhapus dari list dan database) Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+(RINGKASAN FILE-FILE YANG DIBUAT) Tj
+0 -14 Td
+(Komponen File) Tj
+0 -14 Td
+(--------------- -----------------------------------------------) Tj
+0 -14 Td
+(Migration `database/migrations/2026_02_11_081154_...`) Tj
+0 -14 Td
+(Model `app/Models/Buku.php`) Tj
+0 -14 Td
+ET
+endstream
+endobj
+30 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 31 0 R >> >> /Contents 32 0 R >>
+endobj
+31 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+32 0 obj
+<< /Length 992 >>
+stream
+BT
+/F1 10 Tf
+50 820 Td
+(Controller `app/Http/Controllers/BukuController.php`) Tj
+0 -14 Td
+(Routes `routes/web.php`) Tj
+0 -14 Td
+(View Index `resources/views/bukus/index.blade.php`) Tj
+0 -14 Td
+(View Create `resources/views/bukus/create.blade.php`) Tj
+0 -14 Td
+(View Edit `resources/views/bukus/edit.blade.php`) Tj
+0 -14 Td
+(View Show `resources/views/bukus/show.blade.php`) Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+(KESIMPULAN) Tj
+0 -14 Td
+(CRUD adalah fondasi aplikasi web modern. Dengan memahami alur CRUD:) Tj
+0 -14 Td
+(• **CREATE**: Tambahkan data baru ke database) Tj
+0 -14 Td
+(• **READ**: Tampilkan data dari database) Tj
+0 -14 Td
+(• **UPDATE**: Ubah data yang sudah ada) Tj
+0 -14 Td
+(• **DELETE**: Hapus data yang tidak diperlukan) Tj
+0 -14 Td
+(Anda dapat membangun aplikasi yang efisien dan terstruktur. Laravel menyediakan tools) Tj
+0 -14 Td
+(seperti Eloquent ORM, Blade templating, dan Resource routing yang membuat pembuatan) Tj
+0 -14 Td
+(CRUD menjadi cepat dan mudah.) Tj
+0 -14 Td
+ET
+endstream
+endobj
+xref
+0 33
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000177 00000 n 
+0000000303 00000 n 
+0000000371 00000 n 
+0000003024 00000 n 
+0000003150 00000 n 
+0000003218 00000 n 
+0000005440 00000 n 
+0000005568 00000 n 
+0000005637 00000 n 
+0000007779 00000 n 
+0000007908 00000 n 
+0000007977 00000 n 
+0000010616 00000 n 
+0000010745 00000 n 
+0000010814 00000 n 
+0000013047 00000 n 
+0000013176 00000 n 
+0000013245 00000 n 
+0000015549 00000 n 
+0000015678 00000 n 
+0000015747 00000 n 
+0000018000 00000 n 
+0000018129 00000 n 
+0000018198 00000 n 
+0000020918 00000 n 
+0000021047 00000 n 
+0000021116 00000 n 
+0000023444 00000 n 
+0000023573 00000 n 
+0000023642 00000 n 
+trailer
+<< /Size 33 /Root 1 0 R >>
+startxref
+24686
+%%EOF
